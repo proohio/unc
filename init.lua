@@ -151,24 +151,6 @@ setreadonly(http, true)
 
 getgenv().http_request = request
 
-local _oldd = clonefunction(getscriptclosure_handler)
-
-getgenv().getscriptclosure = newcclosure(function(scr) 
-	local closure = _oldd(scr)
-
-	if typeof(closure) == "function" then
-		local scriptEnv = getfenv(closure)
-
-		scriptEnv["script"] = scr
-
-		return closure
-	else
-		return nil
-	end
-end)
-
-getgenv().getscriptfunction = getgenv().getscriptclosure
-
 local oldreq = clonefunction(getrenv().require)
 getgenv().require = newcclosure(function(v)
     local oldlevel = getthreadcontext()
