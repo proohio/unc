@@ -50,28 +50,34 @@ DrawingLib.Fonts = {
 
 local drawings = {}
 
+getgenv().isrenderobj = function(drawingObj)
+	local success, isrenderobj = pcall(function()
+		return drawingObj.Parent == drawingUI
+	end)
+	if not success then return false end
+	return isrenderobj
+end
+
+getgenv().getrenderproperty = function(drawingObj, property)
+	local success, drawingProperty  = pcall(function()
+		return drawingObj[property]
+	end)
+	if not success then return end
+
+	if drawingProperty ~= nil then
+		return drawingProperty
+	end
+end
+
+getgenv().setrenderproperty = function(drawingObj, property, value)
+	assert(drawingFunctions.getrenderproperty(drawingObj, property), "'" .. tostring(property) .. "' is not a valid property of " .. tostring(drawingObj) .. ", " .. tostring(typeof(drawingObj)))
+	drawingObj[property]  = value
+end
+
 getgenv().cleardrawcache = function()
-    for _, v in pairs(drawings) do
-        v:Remove()
-    end
-    table.clear(drawings)
-end
-
-getgenv().isrenderobj = function(thing)
-    return drawings[thing] ~= nil
-end
-
-getgenv().getrenderproperty = function(thing, prop)
-    return thing[prop]
-end
-
-getgenv().setrenderproperty = function(thing, prop, val)
-    local success, err = pcall(function()
-        thing[prop] = val
-    end)
-    if not success and err then 
-        warn(err) 
-    end
+	for _, drawing in drawingUI:GetDescendants() do
+		drawing:Remove()
+	end
 end
 
 getgenv().Drawing = {}
