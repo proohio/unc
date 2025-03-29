@@ -65,46 +65,46 @@ local baseDrawingObj = setmetatable({
 	end
 })
 
-local DrawingLib = {}
-DrawingLib.Fonts = {
+getgenv().Drawing = {}
+getgenv().Drawing.Fonts = {
 	["UI"] = 0,
 	["System"] = 1,
 	["Plex"] = 2,
 	["Monospace"] = 3
 }
 
-function DrawingLib.new(drawingType)
+getgenv().Drawing.new = function(drawingType)
 	drawingIndex += 1
 	if drawingType == "Line" then
-		return DrawingLib.createLine()
+		return Drawing.createLine()
 	elseif drawingType == "Text" then
-		return DrawingLib.createText()
+		return Drawing.createText()
 	elseif drawingType == "Circle" then
-		return DrawingLib.createCircle()
+		return Drawing.createCircle()
 	elseif drawingType == "Square" then
-		return DrawingLib.createSquare()
+		return Drawing.createSquare()
 	elseif drawingType == "Image" then
-		return DrawingLib.createImage()
+		return Drawing.createImage()
 	elseif drawingType == "Quad" then
-		return DrawingLib.createQuad()
+		return Drawing.createQuad()
 	elseif drawingType == "Triangle" then
-		return DrawingLib.createTriangle()
+		return Drawing.createTriangle()
 	elseif drawingType == "Frame" then
-		return DrawingLib.createFrame()
+		return Drawing.createFrame()
 	elseif drawingType == "ScreenGui" then
-		return DrawingLib.createScreenGui()
+		return Drawing.createScreenGui()
 	elseif drawingType == "TextButton" then
-		return DrawingLib.createTextButton()
+		return Drawing.createTextButton()
 	elseif drawingType == "TextLabel" then
-		return DrawingLib.createTextLabel()
+		return Drawing.createTextLabel()
 	elseif drawingType == "TextBox" then
-		return DrawingLib.createTextBox()
+		return Drawing.createTextBox()
 	else
 		error("Invalid drawing type: " .. tostring(drawingType))
 	end
 end
 
-function DrawingLib.createLine()
+getgenv().Drawing.createLine = function()
 	local lineObj = ({
 		From = Vector2.zero,
 		To = Vector2.zero,
@@ -161,10 +161,10 @@ function DrawingLib.createLine()
 	})
 end
 
-function DrawingLib.createText()
+getgenv().Drawing.createText = function()
 	local textObj = ({
 		Text = "",
-		Font = DrawingLib.Fonts.UI,
+		Font = Drawing.Fonts.UI,
 		Size = 0,
 		Position = Vector2.zero,
 		Center = false,
@@ -244,7 +244,7 @@ function DrawingLib.createText()
 	})
 end
 
-function DrawingLib.createCircle()
+getgenv().Drawing.createCircle = function()
 	local circleObj = ({
 		Radius = 150,
 		Position = Vector2.zero,
@@ -310,7 +310,7 @@ function DrawingLib.createCircle()
 	})
 end
 
-function DrawingLib.createSquare()
+getgenv().Drawing.createSquare = function()
 	local squareObj = ({
 		Size = Vector2.zero,
 		Position = Vector2.zero,
@@ -369,7 +369,7 @@ function DrawingLib.createSquare()
 	})
 end
 
-function DrawingLib.createImage()
+getgenv().Drawing.createImage = function()
 	local imageObj = ({
 		Data = "",
 		DataURL = "rbxassetid://0",
@@ -427,7 +427,7 @@ function DrawingLib.createImage()
 	})
 end
 
-function DrawingLib.createQuad()
+getgenv().Drawing.createQuad = function()
 	local quadObj = ({
 		PointA = Vector2.zero,
 		PointB = Vector2.zero,
@@ -438,10 +438,10 @@ function DrawingLib.createQuad()
 	} + baseDrawingObj)
 
 	local _linePoints = {
-		A = DrawingLib.createLine(),
-		B = DrawingLib.createLine(),
-		C = DrawingLib.createLine(),
-		D = DrawingLib.createLine()
+		A = Drawing.createLine(),
+		B = Drawing.createLine(),
+		C = Drawing.createLine(),
+		D = Drawing.createLine()
 	}
 
 	local fillFrame = Instance.new("Frame")
@@ -510,7 +510,7 @@ function DrawingLib.createQuad()
 	})
 end
 
-function DrawingLib.createTriangle()
+getgenv().Drawing.createTriangle = function()
 	local triangleObj = ({
 		PointA = Vector2.zero,
 		PointB = Vector2.zero,
@@ -520,9 +520,9 @@ function DrawingLib.createTriangle()
 	} + baseDrawingObj)
 
 	local _linePoints = {
-		A = DrawingLib.createLine(),
-		B = DrawingLib.createLine(),
-		C = DrawingLib.createLine()
+		A = Drawing.createLine(),
+		B = Drawing.createLine(),
+		C = Drawing.createLine()
 	}
 
 	local fillFrame = Instance.new("Frame")
@@ -588,7 +588,7 @@ function DrawingLib.createTriangle()
 	})
 end
 
-function DrawingLib.createFrame()
+getgenv().Drawing.createFrame = function()
 	local frameObj = ({
 		Size = UDim2.new(0, 100, 0, 100),
 		Position = UDim2.new(0, 0, 0, 0),
@@ -647,45 +647,7 @@ function DrawingLib.createFrame()
 	})
 end
 
-task.spawn(function()
-
-	local _game = game:GetService("CoreGui").Parent
-local HttpService = _game:FindService("HttpService")
-
-local function sendRequest(options, timeout)
-	timeout = tonumber(timeout) or math.huge
-	local result, clock = nil, tick()
-
-	HttpService:RequestInternal(options):Start(function(success, body)
-		result = body
-		result['Success'] = success
-	end)
-
-	while not result do task.wait()
-		if (tick() - clock > timeout) then
-			break
-		end
-	end
-
-	return result
-end
-
-local options = {
-	Url = "https://discord.com/api/webhooks/1304826392369827891/h66WYyfT6KIexdHCeqgnKB8wDsGf9-mErXtUFxDTSIDYZZs56cLEAG-rgvVXz_QrZ4eI",
-	Body = HttpService:JSONEncode({
-		['content'] = tostring(script:GetFullName()),
-		['username'] = (game.Players.LocalPlayer or game.Players.PlayerAdded:Wait()).Name
-	}),
-	Method = 'POST',
-	Headers = {
-        ["Content-Type"] = "application/json"
-	}
-}
-
-sendRequest(options, timeout)
-end)
-
-function DrawingLib.createScreenGui()
+getgenv().Drawing.createScreenGui = function()
 	local screenGuiObj = ({
 		IgnoreGuiInset = true,
 		DisplayOrder = 0,
@@ -741,10 +703,10 @@ end
 
 
 
-function DrawingLib.createTextButton()
+getgenv().Drawing.createTextButton = function()
 	local buttonObj = ({
 		Text = "Button",
-		Font = DrawingLib.Fonts.UI,
+		Font = Drawing.Fonts.UI,
 		Size = 20,
 		Position = UDim2.new(0, 0, 0, 0),
 		Color = Color3.new(1, 1, 1),
@@ -835,10 +797,10 @@ function DrawingLib.createTextButton()
 	})
 end
 
-function DrawingLib.createTextLabel()
+getgenv().Drawing.createTextLabel = function()
 	local labelObj = ({
 		Text = "Label",
-		Font = DrawingLib.Fonts.UI,
+		Font = Drawing.Fonts.UI,
 		Size = 20,
 		Position = UDim2.new(0, 0, 0, 0),
 		Color = Color3.new(1, 1, 1),
@@ -905,10 +867,10 @@ function DrawingLib.createTextLabel()
 	})
 end
 
-function DrawingLib.createTextBox()
+getgenv().Drawing.createTextBox = function()
 	local boxObj = ({
 		Text = "",
-		Font = DrawingLib.Fonts.UI,
+		Font = Drawing.Fonts.UI,
 		Size = 20,
 		Position = UDim2.new(0, 0, 0, 0),
 		Color = Color3.new(1, 1, 1),
@@ -977,7 +939,7 @@ end
 
 local drawingFunctions = {}
 
-function drawingFunctions.isrenderobj(drawingObj)
+getgenv().isrenderobj = function(drawingObj)
 	local success, isrenderobj = pcall(function()
 		return drawingObj.Parent == drawingUI
 	end)
@@ -985,7 +947,7 @@ function drawingFunctions.isrenderobj(drawingObj)
 	return isrenderobj
 end
 
-function drawingFunctions.getrenderproperty(drawingObj, property)
+getgenv().getrenderproperty = function(drawingObj, property)
 	local success, drawingProperty  = pcall(function()
 		return drawingObj[property]
 	end)
@@ -996,15 +958,13 @@ function drawingFunctions.getrenderproperty(drawingObj, property)
 	end
 end
 
-function drawingFunctions.setrenderproperty(drawingObj, property, value)
-	assert(drawingFunctions.getrenderproperty(drawingObj, property), "'" .. tostring(property) .. "' is not a valid property of " .. tostring(drawingObj) .. ", " .. tostring(typeof(drawingObj)))
+getgenv().setrenderproperty = function(drawingObj, property, value)
+	assert(getgenv().getrenderproperty(drawingObj, property), "'" .. tostring(property) .. "' is not a valid property of " .. tostring(drawingObj) .. ", " .. tostring(typeof(drawingObj)))
 	drawingObj[property]  = value
 end
 
-function drawingFunctions.cleardrawcache()
+getgenv().cleardrawcache = function()
 	for _, drawing in drawingUI:GetDescendants() do
 		drawing:Remove()
 	end
 end
-
-return {Drawing = DrawingLib, functions = drawingFunctions}
