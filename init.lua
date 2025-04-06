@@ -150,23 +150,3 @@ getgenv().http.request = request
 setreadonly(http, true)
 
 getgenv().http_request = request
-
-local oldreq = clonefunction(getrenv().require)
-getgenv().require = newcclosure(function(v)
-    local oldlevel = getthreadcontext()
-    local succ, res = pcall(oldreq, v)
-    if not succ and res:find('RobloxScript') then
-        succ = nil
-        coroutine.resume(coroutine.create(newcclosure(function()
-            setthreadcontext((oldlevel > 5 and 2) or 8)
-            succ, res = pcall(oldreq, v)
-        end)))
-        repeat task.wait() until succ ~= nil
-    end
-    
-    setthreadcontext(oldlevel)
-    
-    if succ then
-        return res
-    end
-end)
