@@ -6,6 +6,23 @@ getgenv().consoleprint = function() end
 getgenv().consolesettitle = function() end
 getgenv().rconsolename = function() end
 
+getgenv().debug = table.clone(debug)
+
+debug.getconstant = getgenv().getconstant
+debug.getconstants = getgenv().getconstants
+debug.getinfo = getgenv().getinfo
+debug.setconstant = getgenv().setconstant
+debug.getproto = getgenv().getproto
+debug.getprotos = getgenv().getprotos
+debug.getstack = getgenv().getstack
+debug.setstack = getgenv().setstack
+debug.getupvalue = getgenv().getupvalue
+debug.getupvalues = getgenv().getupvalues
+debug.setupvalue = getgenv().setupvalue
+debug.getregistry = getgenv().getregistry
+
+debug = debug
+
 getgenv().bit = {}
 
 for i, v in next, bit32 do
