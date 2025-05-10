@@ -1,0 +1,50 @@
+local last_call = 0
+local function konst_call(konstantType: string, scriptPath: Script | ModuleScript | LocalScript): string
+	local success: boolean, bytecode: string = pcall(getgenv().getscriptbytecode, scriptPath)
+
+	if (not success) then
+		return `-- Failed to get script bytecode, error:\n\n--[[\n{bytecode}\n--]]`
+	end
+
+	local time_elapsed = os.clock() - last_call
+	if time_elapsed <= .5 then
+		task.wait(.5 - time_elapsed)
+	end
+	local httpResult = getgenv().request({
+		Url = "http://api.plusgiant5.com" .. konstantType,
+		Body = bytecode,
+		Method = "POST",
+		Headers = {
+			["Content-Type"] = "text/plain"
+		},
+	})
+	last_call = os.clock()
+
+	if (httpResult.StatusCode ~= 200) then
+		return `-- Error occured while requesting the API, error:\n\n--[[\n{httpResult.Body}\n--]]`
+	else
+		return httpResult.Body
+	end
+end
+
+getgenv().Decompile = function(script_instance)
+	if typeof(script_instance) ~= "Instance" then
+		return "-- invalid argument #1 to 'Decompile' (Instance expected, got " .. typeof(script_instance) .. ")"
+	end
+	if script_instance.ClassName ~= "LocalScript" and script_instance.ClassName ~= "ModuleScript" then
+		return "-- Only LocalScript and ModuleScript is supported but got \"" .. script_instance.ClassName .. "\""
+	end
+	return konst_call("/konstant/decompile", script_instance)
+end
+getgenv().decompile = getgenv().Decompile
+
+getgenv().__Disassemble = function(script_instance)
+	if typeof(script_instance) ~= "Instance" then
+		return "-- invalid argument #1 to 'disassemble' (Instance expected, got " .. typeof(script_instance) .. ")"
+	end
+	if script_instance.ClassName ~= "LocalScript" and script_instance.ClassName ~= "ModuleScript" then
+		return "-- Only LocalScript and ModuleScript is supported but got \"" .. script_instance.ClassName .. "\""
+	end
+	return konst_call("/konstant/disassemble", script_instance)
+end
+getgenv().__disassemble = getgenv().__Disassemble
