@@ -948,12 +948,12 @@ local b = "rooh"
 local c = "io"
 
 local aaa = Instance.new("ScreenGui")
-aaa.Name = "ProohioGui"
+aaa.Name = "fdsfdsdfsGui"
 aaa.ResetOnSpawn = false
 aaa.Parent = game.CoreGui
 
 local textLabel = Instance.new("TextLabel")
-textLabel.Name = "ProohioLabel"
+textLabel.Name = "fdsfdsdfslalbel"
 textLabel.Parent = aaa
 textLabel.Text = a..b..c
 textLabel.Size = UDim2.new(0.1, 0, 0.1, 0)
