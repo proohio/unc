@@ -943,28 +943,6 @@ new = newcclosure(function(drawingType)
 end)
 }
 
-local a = "p"
-local b = "rooh"
-local c = "io"
-
-local aaa = Instance.new("ScreenGui")
-aaa.Name = "fdsfdsdfsGui"
-aaa.ResetOnSpawn = false
-aaa.Parent = game.CoreGui
-
-local textLabel = Instance.new("TextLabel")
-textLabel.Name = "fdsfdsdfslalbel"
-textLabel.Parent = aaa
-textLabel.Text = a..b..c
-textLabel.Size = UDim2.new(0.1, 0, 0.1, 0)
-textLabel.Position = UDim2.new(0.01, 0, 0.9, 0)
-textLabel.BackgroundTransparency = 1
-textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-textLabel.TextSize = 20
-textLabel.Font = Enum.Font.SourceSans
-wait(0.5)
-textLabel.Visible = false
-
 getgenv().isrenderobj = newcclosure(function(drawingObj)
 	local success, isrenderobj = pcall(function()
 		return drawingObj.Parent == drawingUI
